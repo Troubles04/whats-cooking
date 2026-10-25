@@ -13,7 +13,7 @@ h2{margin-top:0;letter-spacing:-.035em;font-size:1.75rem}.chips{display:flex;fle
 button:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
 .actions{display:flex;gap:10px;flex-wrap:wrap}button.primary{background:var(--green);color:white;border:0;padding:12px 22px;border-radius:12px;cursor:pointer;font:inherit;font-weight:700}
 button.secondary{background:#f0f0e9;border:0;padding:12px 18px;border-radius:12px;cursor:pointer;font:inherit}
-#results{margin-top:32px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+#favorites-section{margin-top:34px;margin-bottom:34px}#favorites-section[hidden]{display:none}#favorites-section .section-note{color:#647568;margin-top:-6px;margin-bottom:20px}#results{margin-top:32px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
 .card{background:#fffefa;border-radius:22px;padding:24px;border:1px solid #e0e8dd;display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 30px #283e2910;transition:transform .2s}.card:hover{transform:translateY(-4px)}
 .emoji{font-size:3rem;background:#eaf1e7;border-radius:18px;width:82px;height:82px;display:grid;place-items:center}.card h3{margin:0}.card p{margin:0;color:#59675c}.card button{margin-top:auto}
 .tag{display:inline-block;background:#f8e7d5;border-radius:20px;padding:6px 12px;font-size:.82rem;font-weight:700;width:max-content}
@@ -33,6 +33,7 @@ footer{text-align:center;padding:30px;color:#647168}
 <input class="search" id="search" type="search" placeholder="⌕  Search your ingredients..." aria-label="Search ingredients"><div id="ingredients" aria-label="Available ingredients"></div>
 <div class="actions toolbar"><button class="primary" id="find">Find my recipes →</button><button class="secondary" id="surprise" type="button">🎲 Surprise me!</button><button class="secondary" id="clear">Clear selection</button><span class="count" id="count">0 ingredients selected</span></div>
 </section>
+<section id="favorites-section" hidden aria-label="Saved recipes"><div class="eyebrow">SAVED FOR LATER</div><h2>❤️ Your favourite recipes</h2><p class="section-note">Your saved meals stay here even after you refresh.</p><div id="favorites-grid" class="grid"></div></section>
 <section id="results" aria-live="polite"><div class="eyebrow">YOUR NEXT MEAL</div><h2>🍽️ Recipe ideas</h2><p>Choose some ingredients above to get started.</p></section>
 </main>
 <footer>Made with ❤️ for hungry students · Recipe suggestions are stored locally, no account needed.</footer>
@@ -77,6 +78,31 @@ const extraIngredients=all.filter(i=>!categorized.has(i));
 if(extraIngredients.length)categories["🥣 Other ingredients"]=extraIngredients;
 const favorites=new Set(JSON.parse(localStorage.getItem('wc_favorites')||'[]'));
 let filter='all';
+function renderFavorites(){
+  const section=document.getElementById('favorites-section');
+  const grid=document.getElementById('favorites-grid');
+  grid.replaceChildren();
+  const savedRecipes=recipes.filter(r=>favorites.has(r.name));
+  section.hidden=savedRecipes.length===0;
+  savedRecipes.forEach(r=>{
+    const card=document.createElement('article');card.className='card';
+    const top=document.createElement('div');top.className='card-top';
+    const icon=document.createElement('div');icon.className='emoji';icon.textContent=r.emoji;
+    const heart=document.createElement('button');heart.className='favorite saved';heart.textContent='♥';
+    heart.setAttribute('aria-label','Remove '+r.name+' from favourites');
+    heart.onclick=()=>{favorites.delete(r.name);localStorage.setItem('wc_favorites',JSON.stringify([...favorites]));renderFavorites();document.querySelectorAll('.recipe-fav').forEach(b=>{if(b.dataset.recipe===r.name){b.textContent='♡';b.classList.remove('saved')}})};
+    top.append(icon,heart);card.append(top);
+    const title=document.createElement('h3');title.textContent=r.name;card.append(title);
+    const time=document.createElement('p');time.textContent='⏱️ '+r.time+' minutes';card.append(time);
+    const details=document.createElement('details');const summary=document.createElement('summary');summary.textContent='View ingredients & instructions';details.append(summary);
+    const ing=document.createElement('strong');ing.textContent='Ingredients';details.append(ing);
+    const ul=document.createElement('ul');r.ingredients.forEach(i=>{const li=document.createElement('li');li.textContent=i;ul.append(li)});details.append(ul);
+    const heading=document.createElement('strong');heading.textContent='Instructions';details.append(heading);
+    const ol=document.createElement('ol');r.steps.forEach(step=>{const li=document.createElement('li');li.textContent=step;ol.append(li)});details.append(ol);
+    card.append(details);grid.append(card);
+  });
+}
+renderFavorites();
 function updateCount(){document.getElementById('count').textContent=selected.size+' ingredient'+(selected.size===1?'':'s')+' selected'}
 
 const holder=document.getElementById("ingredients");
@@ -93,7 +119,7 @@ const note=document.createElement("p");note.textContent=`${matched.filter(r=>!r.
 const grid=document.createElement("div");grid.className="grid";
 matched.forEach(r=>{
 const card=document.createElement("article");card.className="card";
-const top=document.createElement('div');top.className='card-top';const icon=document.createElement("div");icon.className="emoji";icon.textContent=r.emoji;const fav=document.createElement('button');fav.className='favorite'+(favorites.has(r.name)?' saved':'');fav.textContent=favorites.has(r.name)?'♥':'♡';fav.setAttribute('aria-label','Save '+r.name);fav.onclick=()=>{favorites.has(r.name)?favorites.delete(r.name):favorites.add(r.name);localStorage.setItem('wc_favorites',JSON.stringify([...favorites]));fav.textContent=favorites.has(r.name)?'♥':'♡';fav.classList.toggle('saved',favorites.has(r.name))};top.append(icon,fav);card.append(top);
+const top=document.createElement('div');top.className='card-top';const icon=document.createElement("div");icon.className="emoji";icon.textContent=r.emoji;const fav=document.createElement('button');fav.className='favorite recipe-fav'+(favorites.has(r.name)?' saved':'');fav.dataset.recipe=r.name;fav.textContent=favorites.has(r.name)?'♥':'♡';fav.setAttribute('aria-label','Save '+r.name);fav.onclick=()=>{favorites.has(r.name)?favorites.delete(r.name):favorites.add(r.name);localStorage.setItem('wc_favorites',JSON.stringify([...favorites]));fav.textContent=favorites.has(r.name)?'♥':'♡';fav.classList.toggle('saved',favorites.has(r.name));renderFavorites()};top.append(icon,fav);card.append(top);
 const title=document.createElement("h3");title.textContent=r.name;card.append(title);
 const tag=document.createElement("span");tag.className="tag";tag.textContent=r.missing.length?`${r.missing.length} missing ingredient${r.missing.length===1?"":"s"}`:"✅ Ready to cook!";card.append(tag);
 const time=document.createElement("p");time.textContent=`⏱️ ${r.time} minutes`;card.append(time);
@@ -114,7 +140,12 @@ document.getElementById("surprise").addEventListener("click",()=>{
   target.replaceChildren();
   const heading=document.createElement("h2");heading.textContent="🎲 Surprise! Try this recipe";target.append(heading);
   const card=document.createElement("article");card.className="card";
-  const icon=document.createElement("div");icon.className="emoji";icon.textContent=recipe.emoji;card.append(icon);
+  const top=document.createElement('div');top.className='card-top';
+  const icon=document.createElement("div");icon.className="emoji";icon.textContent=recipe.emoji;
+  const fav=document.createElement('button');fav.className='favorite recipe-fav'+(favorites.has(recipe.name)?' saved':'');fav.dataset.recipe=recipe.name;
+  fav.textContent=favorites.has(recipe.name)?'♥':'♡';fav.setAttribute('aria-label','Save '+recipe.name);
+  fav.onclick=()=>{favorites.has(recipe.name)?favorites.delete(recipe.name):favorites.add(recipe.name);localStorage.setItem('wc_favorites',JSON.stringify([...favorites]));fav.textContent=favorites.has(recipe.name)?'♥':'♡';fav.classList.toggle('saved',favorites.has(recipe.name));renderFavorites()};
+  top.append(icon,fav);card.append(top);
   const title=document.createElement("h3");title.textContent=recipe.name;card.append(title);
   const time=document.createElement("p");time.textContent=`⏱️ ${recipe.time} minutes`;card.append(time);
   const note=document.createElement("p");note.textContent=missing.length?`You still need: ${missing.join(", ")}`:"✅ You have all the listed ingredients!";card.append(note);
