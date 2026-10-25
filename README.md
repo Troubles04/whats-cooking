@@ -4,9 +4,10 @@ A simple recipe-finder prototype that suggests meals based on ingredients you al
 
 ## Features
 - Select available ingredients
-- See recipes ranked by how many, and which, ingredients you are missing
+- See recipes ranked by how many ingredients you are missing, and also syas which ones you are missing
 - Expand each recipe to view ingredients and cooking instructions
 - Suprise me button that gives a random recipe
+- favourites remain visible throughout refreshes
 
 ## Run
 Open 'index.html' in any modern browser.
