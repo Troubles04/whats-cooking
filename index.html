@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What's Cooking? 🍳</title>
+<style>
+:root{--ink:#27352e;--green:#386b4d;--cream:#fffaf0;--orange:#efad72}
+*{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}
+header{background:#e8f0df;padding:44px 20px;text-align:center}h1{font-size:clamp(2.1rem,6vw,3.6rem);margin:0}header p{font-size:1.1rem}
+main{max-width:1040px;margin:auto;padding:30px 18px}.panel{background:white;border:1px solid #e7e7df;border-radius:20px;padding:24px;box-shadow:0 5px 20px #283e2910}
+h2{margin-top:0}.chips{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}.chip{border:1px solid #c9d5c5;background:#f5f8f1;padding:10px 15px;border-radius:30px;cursor:pointer;font:inherit}
+.chip[aria-pressed="true"]{background:var(--green);color:white;border-color:var(--green)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
+.actions{display:flex;gap:10px;flex-wrap:wrap}button.primary{background:var(--green);color:white;border:0;padding:12px 22px;border-radius:12px;cursor:pointer;font:inherit;font-weight:700}
+button.secondary{background:#f0f0e9;border:0;padding:12px 18px;border-radius:12px;cursor:pointer;font:inherit}
+#results{margin-top:32px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+.card{background:white;border-radius:18px;padding:22px;border:1px solid #e6e8e1;display:flex;flex-direction:column;gap:10px}
+.emoji{font-size:2.8rem}.card h3{margin:0}.card p{margin:0;color:#59675c}.card button{margin-top:auto}
+.tag{display:inline-block;background:#f8e7d5;border-radius:10px;padding:5px 9px;font-size:.85rem;width:max-content}
+details{margin-top:12px;background:#f7f8f3;padding:12px;border-radius:12px}summary{cursor:pointer;font-weight:650}
+li{margin:7px 0}.empty{padding:20px;background:#fff1e3;border-radius:14px}
+footer{text-align:center;padding:30px;color:#647168}
+</style>
+</head>
+<body>
+<header><h1>🍳 What's Cooking?</h1><p>Turn the ingredients you have into something delicious.</p></header>
+<main>
+<section class="panel">
+<h2>🥕 What's in your kitchen?</h2>
+<p>Select your ingredients, then discover meals you can make.</p>
+<div class="chips" id="ingredients" aria-label="Available ingredients"></div>
+<div class="actions"><button class="primary" id="find">Find my recipes →</button><button class="secondary" id="clear">Clear selection</button></div>
+</section>
+<section id="results" aria-live="polite"><h2>🍽️ Recipe ideas</h2><p>Choose some ingredients above to get started.</p></section>
+</main>
+<footer>Made with ❤️ for hungry students · Recipe suggestions are stored locally, no account needed.</footer>
+<script>
+const recipes=[
+{name:"Cheese Omelette",emoji:"🍳",time:10,ingredients:["Eggs","Cheese","Butter"],steps:["Beat the eggs in a bowl.","Melt butter in a pan over medium heat.","Pour in the eggs and cook until nearly set.","Add cheese, fold the omelette, and cook until fully set."]},
+{name:"Tomato Pasta",emoji:"🍝",time:20,ingredients:["Pasta","Tomatoes","Garlic","Olive Oil"],steps:["Cook pasta according to the package.","Chop tomatoes and garlic.","Warm olive oil in a pan and gently cook garlic.","Add tomatoes and simmer for 8 minutes.","Mix with drained pasta."]},
+{name:"Egg Fried Rice",emoji:"🍚",time:15,ingredients:["Rice","Eggs","Soy Sauce","Carrots"],steps:["Use cooked, cooled rice.","Dice carrots and cook in a pan until tender.","Add beaten eggs and scramble until cooked.","Add rice and soy sauce; stir until everything is hot."]},
+{name:"Chicken Fried Rice",emoji:"🍗",time:25,ingredients:["Chicken","Rice","Eggs","Soy Sauce"],steps:["Cook rice and allow it to cool.","Cut chicken into small pieces and cook thoroughly in a pan.","Scramble the eggs until cooked.","Stir in rice and soy sauce and heat through."]},
+{name:"Grilled Cheese Sandwich",emoji:"🥪",time:10,ingredients:["Bread","Cheese","Butter"],steps:["Butter the outside of two bread slices.","Put cheese between the slices.","Cook in a pan over medium-low heat until golden on both sides and cheese melts."]},
+{name:"Avocado Toast",emoji:"🥑",time:5,ingredients:["Bread","Avocado","Lemon"],steps:["Toast the bread.","Mash avocado with a little lemon juice.","Spread on toast and serve."]},
+{name:"Banana Pancakes",emoji:"🥞",time:15,ingredients:["Banana","Eggs","Flour","Milk"],steps:["Mash banana and whisk with eggs, flour, and milk.","Spoon small portions into a lightly greased pan.","Cook on both sides until golden and cooked through."]},
+{name:"Greek-Style Salad",emoji:"🥗",time:10,ingredients:["Tomatoes","Cucumber","Cheese","Olive Oil"],steps:["Wash and chop tomatoes and cucumber.","Cube the cheese.","Toss everything with olive oil."]},
+{name:"Chicken Wrap",emoji:"🌯",time:20,ingredients:["Chicken","Tortilla","Lettuce","Tomatoes"],steps:["Cook chicken thoroughly and slice it.","Wash lettuce and tomatoes.","Place everything in a tortilla and roll tightly."]},
+{name:"Creamy Mushroom Pasta",emoji:"🍄",time:20,ingredients:["Pasta","Mushrooms","Cream","Garlic"],steps:["Cook pasta according to package directions.","Slice mushrooms and garlic.","Cook mushrooms and garlic in a pan.","Add cream and gently simmer.","Toss with cooked pasta."]},
+{name:"Peanut Butter Banana Toast",emoji:"🍌",time:5,ingredients:["Bread","Peanut Butter","Banana"],steps:["Toast the bread.","Spread with peanut butter.","Top with sliced banana."]},
+{name:"Veggie Quesadilla",emoji:"🧀",time:15,ingredients:["Tortilla","Cheese","Tomatoes","Bell Pepper"],steps:["Chop tomatoes and bell pepper.","Place vegetables and cheese on half a tortilla.","Fold and cook in a pan until the cheese melts and the tortilla is golden."]}
+];
+const all=[...new Set(recipes.flatMap(r=>r.ingredients))].sort();
+const selected=new Set();
+const holder=document.getElementById("ingredients");
+all.forEach(name=>{const b=document.createElement("button");b.className="chip";b.textContent=name;b.type="button";b.setAttribute("aria-pressed","false");b.addEventListener("click",()=>{if(selected.has(name))selected.delete(name);else selected.add(name);b.setAttribute("aria-pressed",String(selected.has(name)));});holder.appendChild(b)});
+document.getElementById("clear").addEventListener("click",()=>{selected.clear();holder.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed","false"));document.getElementById("results").innerHTML="<h2>🍽️ Recipe ideas</h2><p>Choose some ingredients above to get started.</p>"});
+document.getElementById("find").addEventListener("click",()=>{
+const target=document.getElementById("results");target.replaceChildren();
+const heading=document.createElement("h2");heading.textContent="🍽️ Your recipe matches";target.append(heading);
+if(!selected.size){const p=document.createElement("p");p.textContent="Select at least one ingredient to see recipes.";target.append(p);return}
+const matched=recipes.map(r=>({...r,have:r.ingredients.filter(i=>selected.has(i)),missing:r.ingredients.filter(i=>!selected.has(i))})).filter(r=>r.have.length).sort((a,b)=>a.missing.length-b.missing.length||b.have.length-a.have.length);
+const note=document.createElement("p");note.textContent=`${matched.filter(r=>!r.missing.length).length} recipes ready to make · ${matched.length} recipes using at least one of your ingredients.`;target.append(note);
+const grid=document.createElement("div");grid.className="grid";
+matched.forEach(r=>{
+const card=document.createElement("article");card.className="card";
+const icon=document.createElement("div");icon.className="emoji";icon.textContent=r.emoji;card.append(icon);
+const title=document.createElement("h3");title.textContent=r.name;card.append(title);
+const tag=document.createElement("span");tag.className="tag";tag.textContent=r.missing.length?`${r.missing.length} missing ingredient${r.missing.length===1?"":"s"}`:"✅ Ready to cook!";card.append(tag);
+const time=document.createElement("p");time.textContent=`⏱️ ${r.time} minutes`;card.append(time);
+const need=document.createElement("p");need.textContent=r.missing.length?`Still need: ${r.missing.join(", ")}`:"You have all the listed ingredients!";card.append(need);
+const details=document.createElement("details");const summary=document.createElement("summary");summary.textContent="View ingredients & instructions";details.append(summary);
+const ingredientsTitle=document.createElement("strong");ingredientsTitle.textContent="Ingredients";details.append(ingredientsTitle);
+const ul=document.createElement("ul");r.ingredients.forEach(i=>{const li=document.createElement("li");li.textContent=i;ul.append(li)});details.append(ul);
+const stepsTitle=document.createElement("strong");stepsTitle.textContent="Instructions";details.append(stepsTitle);
+const ol=document.createElement("ol");r.steps.forEach(s=>{const li=document.createElement("li");li.textContent=s;ol.append(li)});details.append(ol);card.append(details);grid.append(card)
+});target.append(grid);target.scrollIntoView({behavior:"smooth",block:"start"})
+});
+</script>
+</body></html>
