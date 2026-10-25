@@ -4,14 +4,11 @@ A simple recipe-finder prototype that suggests meals based on ingredients you al
 
 ## Features
 - Select available ingredients
-- See recipes ranked by how many ingredients you are missing
+- See recipes ranked by how many, and which, ingredients you are missing
 - Expand each recipe to view ingredients and cooking instructions
 
 ## Run
-Open `index.html` in any modern browser. No installation, server, API key, or account required.
-
-## Tech
-HTML, CSS, and vanilla JavaScript.
+Open 'index.html' in any modern browser.
 
 ## Test checklist
 - Select Eggs, Cheese, and Butter; click Find my recipes; Cheese Omelette should say Ready to cook.
