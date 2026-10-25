@@ -31,7 +31,7 @@ footer{text-align:center;padding:30px;color:#647168}
 <h2>🥕 What's in your kitchen?</h2>
 <p>Select your ingredients, then discover meals you can make.</p>
 <input class="search" id="search" type="search" placeholder="⌕  Search your ingredients..." aria-label="Search ingredients"><div id="ingredients" aria-label="Available ingredients"></div>
-<div class="actions toolbar"><button class="primary" id="find">Find my recipes →</button><button class="secondary" id="clear">Clear selection</button><span class="count" id="count">0 ingredients selected</span></div>
+<div class="actions toolbar"><button class="primary" id="find">Find my recipes →</button><button class="secondary" id="surprise" type="button">🎲 Surprise me!</button><button class="secondary" id="clear">Clear selection</button><span class="count" id="count">0 ingredients selected</span></div>
 </section>
 <section id="results" aria-live="polite"><div class="eyebrow">YOUR NEXT MEAL</div><h2>🍽️ Recipe ideas</h2><p>Choose some ingredients above to get started.</p></section>
 </main>
@@ -49,11 +49,32 @@ const recipes=[
 {name:"Chicken Wrap",emoji:"🌯",time:20,ingredients:["Chicken","Tortilla","Lettuce","Tomatoes"],steps:["Cook chicken thoroughly and slice it.","Wash lettuce and tomatoes.","Place everything in a tortilla and roll tightly."]},
 {name:"Creamy Mushroom Pasta",emoji:"🍄",time:20,ingredients:["Pasta","Mushrooms","Cream","Garlic"],steps:["Cook pasta according to package directions.","Slice mushrooms and garlic.","Cook mushrooms and garlic in a pan.","Add cream and gently simmer.","Toss with cooked pasta."]},
 {name:"Peanut Butter Banana Toast",emoji:"🍌",time:5,ingredients:["Bread","Peanut Butter","Banana"],steps:["Toast the bread.","Spread with peanut butter.","Top with sliced banana."]},
-{name:"Veggie Quesadilla",emoji:"🧀",time:15,ingredients:["Tortilla","Cheese","Tomatoes","Bell Pepper"],steps:["Chop tomatoes and bell pepper.","Place vegetables and cheese on half a tortilla.","Fold and cook in a pan until the cheese melts and the tortilla is golden."]}
+{name:"Veggie Quesadilla",emoji:"🧀",time:15,ingredients:["Tortilla","Cheese","Tomatoes","Bell Pepper"],steps:["Chop tomatoes and bell pepper.","Place vegetables and cheese on half a tortilla.","Fold and cook in a pan until the cheese melts and the tortilla is golden."]},
+{"name": "Scrambled Eggs on Toast", "emoji": "🍳", "time": 10, "ingredients": ["Eggs", "Bread", "Butter"], "steps": ["Toast the bread.", "Melt butter in a pan and scramble beaten eggs until fully set.", "Serve the eggs on toast."]},
+{"name": "Garlic Butter Pasta", "emoji": "🍝", "time": 15, "ingredients": ["Pasta", "Garlic", "Butter", "Cheese"], "steps": ["Boil pasta according to package directions.", "Melt butter and gently cook chopped garlic.", "Toss the pasta with garlic butter and sprinkle with cheese."]},
+{"name": "Tomato and Cheese Toastie", "emoji": "🥪", "time": 10, "ingredients": ["Bread", "Tomatoes", "Cheese", "Butter"], "steps": ["Slice the tomato and cheese.", "Layer between bread slices and butter the outside.", "Toast in a pan until golden and the cheese melts."]},
+{"name": "Mushroom Omelette", "emoji": "🍄", "time": 15, "ingredients": ["Eggs", "Mushrooms", "Butter", "Cheese"], "steps": ["Slice and sauté mushrooms in butter.", "Pour beaten eggs over mushrooms and cook until set.", "Add cheese, fold and serve."]},
+{"name": "Chicken and Rice Bowl", "emoji": "🍚", "time": 25, "ingredients": ["Chicken", "Rice", "Carrots", "Soy Sauce"], "steps": ["Cook rice following package instructions.", "Cook diced chicken thoroughly in a pan.", "Cook chopped carrots until tender.", "Combine with rice and soy sauce."]},
+{"name": "Cucumber Tomato Salad", "emoji": "🥒", "time": 10, "ingredients": ["Cucumber", "Tomatoes", "Lemon", "Olive Oil"], "steps": ["Wash and chop cucumber and tomatoes.", "Whisk lemon juice and olive oil together.", "Toss vegetables with dressing."]},
+{"name": "Cheesy Tortilla Pizza", "emoji": "🍕", "time": 15, "ingredients": ["Tortilla", "Tomatoes", "Cheese", "Bell Pepper"], "steps": ["Heat oven to 200°C.", "Top a tortilla with chopped tomatoes, cheese and pepper.", "Bake for 8–10 minutes until cheese melts and tortilla is crisp."]},
+{"name": "Creamy Tomato Pasta", "emoji": "🍅", "time": 20, "ingredients": ["Pasta", "Tomatoes", "Cream", "Garlic"], "steps": ["Cook pasta according to package directions.", "Cook chopped garlic and tomatoes in a pan.", "Add cream and simmer gently.", "Stir in drained pasta."]},
+{"name": "Avocado Egg Toast", "emoji": "🥑", "time": 12, "ingredients": ["Bread", "Avocado", "Eggs", "Lemon"], "steps": ["Toast the bread.", "Mash avocado with lemon juice.", "Cook eggs until set.", "Top toast with avocado and eggs."]},
+{"name": "Banana Smoothie", "emoji": "🥤", "time": 5, "ingredients": ["Banana", "Milk", "Peanut Butter"], "steps": ["Peel and slice banana.", "Blend banana with milk and peanut butter until smooth.", "Serve immediately."]},
+{"name": "Chicken Quesadilla", "emoji": "🌮", "time": 20, "ingredients": ["Tortilla", "Chicken", "Cheese", "Bell Pepper"], "steps": ["Cook chicken thoroughly and slice it.", "Chop pepper and cook until tender.", "Fill tortilla with chicken, pepper and cheese.", "Fold and toast on both sides until golden and cheese melts."]},
+{"name": "Mushroom Fried Rice", "emoji": "🍄", "time": 20, "ingredients": ["Rice", "Mushrooms", "Eggs", "Soy Sauce"], "steps": ["Use cooked, cooled rice.", "Sauté sliced mushrooms until tender.", "Scramble eggs until fully set.", "Add rice and soy sauce and heat through."]},
+{"name": "Cheesy Scrambled Eggs", "emoji": "🧀", "time": 10, "ingredients": ["Eggs", "Cheese", "Butter", "Milk"], "steps": ["Whisk eggs with a splash of milk.", "Melt butter over low heat.", "Stir eggs gently until fully cooked, then add cheese."]},
+{"name": "Peanut Butter Pancakes", "emoji": "🥞", "time": 20, "ingredients": ["Flour", "Eggs", "Milk", "Peanut Butter"], "steps": ["Whisk flour, eggs and milk into a batter.", "Cook small pancakes in a lightly greased pan until done on both sides.", "Serve with peanut butter."]},
+{"name": "Lemon Garlic Chicken", "emoji": "🍋", "time": 25, "ingredients": ["Chicken", "Garlic", "Lemon", "Olive Oil"], "steps": ["Mix olive oil, lemon juice and minced garlic.", "Coat chicken with the mixture.", "Cook chicken thoroughly in a pan until it reaches 74°C internally."]},
+{"name": "Tomato Egg Rice", "emoji": "🍅", "time": 20, "ingredients": ["Rice", "Tomatoes", "Eggs", "Soy Sauce"], "steps": ["Prepare rice according to package directions.", "Cook chopped tomatoes in a pan until soft.", "Add beaten eggs and cook until set.", "Stir in rice and soy sauce and heat through."]},
+{"name": "Cheese and Cucumber Wrap", "emoji": "🌯", "time": 5, "ingredients": ["Tortilla", "Cheese", "Cucumber", "Lettuce"], "steps": ["Wash and slice cucumber and lettuce.", "Arrange cheese and vegetables on a tortilla.", "Roll up tightly and serve."]},
+{"name": "Creamy Garlic Mushrooms on Toast", "emoji": "🍄", "time": 15, "ingredients": ["Bread", "Mushrooms", "Cream", "Garlic"], "steps": ["Toast the bread.", "Cook mushrooms and garlic until tender.", "Add cream and simmer briefly.", "Spoon over toast."]}
 ];
 const all=[...new Set(recipes.flatMap(r=>r.ingredients))].sort();
 const selected=new Set();
 const categories={"🥬 Vegetables & fruit":["Avocado","Banana","Bell Pepper","Carrots","Cucumber","Garlic","Lemon","Lettuce","Mushrooms","Tomatoes"],"🧀 Dairy & eggs":["Butter","Cheese","Cream","Eggs","Milk"],"🍗 Proteins":["Chicken","Peanut Butter"],"🍞 Pantry essentials":["Bread","Flour","Olive Oil","Pasta","Rice","Soy Sauce","Tortilla"]};
+const categorized=new Set(Object.values(categories).flat());
+const extraIngredients=all.filter(i=>!categorized.has(i));
+if(extraIngredients.length)categories["🥣 Other ingredients"]=extraIngredients;
 const favorites=new Set(JSON.parse(localStorage.getItem('wc_favorites')||'[]'));
 let filter='all';
 function updateCount(){document.getElementById('count').textContent=selected.size+' ingredient'+(selected.size===1?'':'s')+' selected'}
@@ -83,6 +104,28 @@ const ul=document.createElement("ul");r.ingredients.forEach(i=>{const li=documen
 const stepsTitle=document.createElement("strong");stepsTitle.textContent="Instructions";details.append(stepsTitle);
 const ol=document.createElement("ol");r.steps.forEach(s=>{const li=document.createElement("li");li.textContent=s;ol.append(li)});details.append(ol);card.append(details);grid.append(card)
 });target.append(grid);target.scrollIntoView({behavior:"smooth",block:"start"})
+});
+
+// Surprise Me picks a random recipe from the whole collection, even if nothing is selected.
+document.getElementById("surprise").addEventListener("click",()=>{
+  const recipe=recipes[Math.floor(Math.random()*recipes.length)];
+  const missing=recipe.ingredients.filter(i=>!selected.has(i));
+  const target=document.getElementById("results");
+  target.replaceChildren();
+  const heading=document.createElement("h2");heading.textContent="🎲 Surprise! Try this recipe";target.append(heading);
+  const card=document.createElement("article");card.className="card";
+  const icon=document.createElement("div");icon.className="emoji";icon.textContent=recipe.emoji;card.append(icon);
+  const title=document.createElement("h3");title.textContent=recipe.name;card.append(title);
+  const time=document.createElement("p");time.textContent=`⏱️ ${recipe.time} minutes`;card.append(time);
+  const note=document.createElement("p");note.textContent=missing.length?`You still need: ${missing.join(", ")}`:"✅ You have all the listed ingredients!";card.append(note);
+  const details=document.createElement("details");details.open=true;
+  const summary=document.createElement("summary");summary.textContent="Ingredients & instructions";details.append(summary);
+  const ingredientsHeading=document.createElement("strong");ingredientsHeading.textContent="Ingredients";details.append(ingredientsHeading);
+  const ul=document.createElement("ul");recipe.ingredients.forEach(i=>{const li=document.createElement("li");li.textContent=i;ul.append(li)});details.append(ul);
+  const stepsHeading=document.createElement("strong");stepsHeading.textContent="Instructions";details.append(stepsHeading);
+  const ol=document.createElement("ol");recipe.steps.forEach(s=>{const li=document.createElement("li");li.textContent=s;ol.append(li)});details.append(ol);
+  card.append(details);const grid=document.createElement("div");grid.className="grid";grid.append(card);target.append(grid);
+  target.scrollIntoView({behavior:"smooth",block:"start"});
 });
 </script>
 </body></html>
