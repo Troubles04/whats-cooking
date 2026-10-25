@@ -1,4 +1,4 @@
-# What's Cooking? 🍳
+# What's Cooking? 
 
 A simple recipe-finder prototype that suggests meals based on ingredients you already have.
 
@@ -6,6 +6,7 @@ A simple recipe-finder prototype that suggests meals based on ingredients you al
 - Select available ingredients
 - See recipes ranked by how many, and which, ingredients you are missing
 - Expand each recipe to view ingredients and cooking instructions
+- Suprise me button that gives a random recipe
 
 ## Run
 Open 'index.html' in any modern browser.
