@@ -2,36 +2,38 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>What's Cooking? 🍳</title>
+<title>What's Cooking? | Find Your Next Meal</title>
 <style>
 :root{--ink:#27352e;--green:#386b4d;--cream:#fffaf0;--orange:#efad72}
 *{box-sizing:border-box}body{margin:0;background:var(--cream);color:var(--ink);font-family:system-ui,-apple-system,sans-serif}
-header{background:#e8f0df;padding:44px 20px;text-align:center}h1{font-size:clamp(2.1rem,6vw,3.6rem);margin:0}header p{font-size:1.1rem}
-main{max-width:1040px;margin:auto;padding:30px 18px}.panel{background:white;border:1px solid #e7e7df;border-radius:20px;padding:24px;box-shadow:0 5px 20px #283e2910}
-h2{margin-top:0}.chips{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0}.chip{border:1px solid #c9d5c5;background:#f5f8f1;padding:10px 15px;border-radius:30px;cursor:pointer;font:inherit}
+header{background:linear-gradient(125deg,#e5efe1,#f9eadc);padding:72px 20px;text-align:center;border-bottom:1px solid #dce5d8}h1{font-size:clamp(2.1rem,6vw,3.6rem);margin:0}header p{font-size:1.15rem;color:#526357;max-width:550px;margin:16px auto 0}
+main{max-width:1120px;margin:auto;padding:48px 18px}.panel{background:#fffefa;border:1px solid #e0e8dd;border-radius:24px;padding:32px;box-shadow:0 12px 38px #283e2910}
+h2{margin-top:0;letter-spacing:-.035em;font-size:1.75rem}.chips{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 22px}.chip{border:1px solid #c9d5c5;background:#f5f8f1;padding:10px 15px;border-radius:30px;cursor:pointer;font:inherit;transition:transform .15s,background .15s}.chip:hover{transform:translateY(-2px);border-color:#659678}.chip[aria-pressed="true"]::before{content:"✓ ";font-weight:800}
 .chip[aria-pressed="true"]{background:var(--green);color:white;border-color:var(--green)}
 button:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline-offset:3px}
 .actions{display:flex;gap:10px;flex-wrap:wrap}button.primary{background:var(--green);color:white;border:0;padding:12px 22px;border-radius:12px;cursor:pointer;font:inherit;font-weight:700}
 button.secondary{background:#f0f0e9;border:0;padding:12px 18px;border-radius:12px;cursor:pointer;font:inherit}
 #results{margin-top:32px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
-.card{background:white;border-radius:18px;padding:22px;border:1px solid #e6e8e1;display:flex;flex-direction:column;gap:10px}
-.emoji{font-size:2.8rem}.card h3{margin:0}.card p{margin:0;color:#59675c}.card button{margin-top:auto}
-.tag{display:inline-block;background:#f8e7d5;border-radius:10px;padding:5px 9px;font-size:.85rem;width:max-content}
+.card{background:#fffefa;border-radius:22px;padding:24px;border:1px solid #e0e8dd;display:flex;flex-direction:column;gap:12px;box-shadow:0 10px 30px #283e2910;transition:transform .2s}.card:hover{transform:translateY(-4px)}
+.emoji{font-size:3rem;background:#eaf1e7;border-radius:18px;width:82px;height:82px;display:grid;place-items:center}.card h3{margin:0}.card p{margin:0;color:#59675c}.card button{margin-top:auto}
+.tag{display:inline-block;background:#f8e7d5;border-radius:20px;padding:6px 12px;font-size:.82rem;font-weight:700;width:max-content}
 details{margin-top:12px;background:#f7f8f3;padding:12px;border-radius:12px}summary{cursor:pointer;font-weight:650}
 li{margin:7px 0}.empty{padding:20px;background:#fff1e3;border-radius:14px}
 footer{text-align:center;padding:30px;color:#647168}
+
+.topnav{max-width:1120px;margin:auto;padding:20px 18px;display:flex;justify-content:space-between;align-items:center}.logo{font-weight:850;font-size:1.25rem;letter-spacing:-.04em}.topnav a{color:#386b4d;text-decoration:none;font-weight:700}.eyebrow{font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;color:#386b4d;font-weight:800;margin-bottom:12px}.search{display:block;width:100%;max-width:420px;padding:13px 16px;border:1px solid #c9d5c5;border-radius:13px;background:white;font:inherit;margin:20px 0}.category{font-size:.83rem;text-transform:uppercase;letter-spacing:.1em;color:#647568;font-weight:800;margin:23px 0 4px}.toolbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.count{margin-left:auto;color:#647568;font-size:.9rem}.primary:hover{background:#28563d}.favorite{border:0;background:#f3f6f0;border-radius:50%;padding:8px 11px;font-size:1.4rem;cursor:pointer;align-self:flex-end}.favorite.saved{color:#bf5956}.card-top{display:flex;align-items:start;justify-content:space-between}.filterbar{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0 20px}.filterbar button{background:white;border:1px solid #c9d5c5;border-radius:30px;padding:9px 15px;cursor:pointer}.filterbar button.active{background:#386b4d;color:white}.muted{color:#647568}.hide{display:none!important}@media(max-width:600px){header{padding:48px 16px}.panel{padding:20px}.count{width:100%;margin-left:0}}
 </style>
 </head>
 <body>
-<header><h1>🍳 What's Cooking?</h1><p>Turn the ingredients you have into something delicious.</p></header>
+<nav class="topnav"><div class="logo">🍳 what’s cooking?</div><a href="#results">Explore recipes ↗</a></nav><header><div class="eyebrow">GOOD FOOD · LESS WASTE</div><h1>What’s Cooking <span style="color:#386b4d">Tonight?</span></h1><p>Delicious meals made with what you already have. Find your next favourite without another grocery run.</p></header>
 <main>
 <section class="panel">
 <h2>🥕 What's in your kitchen?</h2>
 <p>Select your ingredients, then discover meals you can make.</p>
-<div class="chips" id="ingredients" aria-label="Available ingredients"></div>
-<div class="actions"><button class="primary" id="find">Find my recipes →</button><button class="secondary" id="clear">Clear selection</button></div>
+<input class="search" id="search" type="search" placeholder="⌕  Search your ingredients..." aria-label="Search ingredients"><div id="ingredients" aria-label="Available ingredients"></div>
+<div class="actions toolbar"><button class="primary" id="find">Find my recipes →</button><button class="secondary" id="clear">Clear selection</button><span class="count" id="count">0 ingredients selected</span></div>
 </section>
-<section id="results" aria-live="polite"><h2>🍽️ Recipe ideas</h2><p>Choose some ingredients above to get started.</p></section>
+<section id="results" aria-live="polite"><div class="eyebrow">YOUR NEXT MEAL</div><h2>🍽️ Recipe ideas</h2><p>Choose some ingredients above to get started.</p></section>
 </main>
 <footer>Made with ❤️ for hungry students · Recipe suggestions are stored locally, no account needed.</footer>
 <script>
@@ -51,9 +53,16 @@ const recipes=[
 ];
 const all=[...new Set(recipes.flatMap(r=>r.ingredients))].sort();
 const selected=new Set();
+const categories={"🥬 Vegetables & fruit":["Avocado","Banana","Bell Pepper","Carrots","Cucumber","Garlic","Lemon","Lettuce","Mushrooms","Tomatoes"],"🧀 Dairy & eggs":["Butter","Cheese","Cream","Eggs","Milk"],"🍗 Proteins":["Chicken","Peanut Butter"],"🍞 Pantry essentials":["Bread","Flour","Olive Oil","Pasta","Rice","Soy Sauce","Tortilla"]};
+const favorites=new Set(JSON.parse(localStorage.getItem('wc_favorites')||'[]'));
+let filter='all';
+function updateCount(){document.getElementById('count').textContent=selected.size+' ingredient'+(selected.size===1?'':'s')+' selected'}
+
 const holder=document.getElementById("ingredients");
-all.forEach(name=>{const b=document.createElement("button");b.className="chip";b.textContent=name;b.type="button";b.setAttribute("aria-pressed","false");b.addEventListener("click",()=>{if(selected.has(name))selected.delete(name);else selected.add(name);b.setAttribute("aria-pressed",String(selected.has(name)));});holder.appendChild(b)});
-document.getElementById("clear").addEventListener("click",()=>{selected.clear();holder.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed","false"));document.getElementById("results").innerHTML="<h2>🍽️ Recipe ideas</h2><p>Choose some ingredients above to get started.</p>"});
+function drawIngredients(){holder.replaceChildren();const q=document.getElementById('search').value.toLowerCase();Object.entries(categories).forEach(([label,items])=>{const visible=items.filter(i=>i.toLowerCase().includes(q));if(!visible.length)return;const title=document.createElement('div');title.className='category';title.textContent=label;holder.append(title);const group=document.createElement('div');group.className='chips';visible.forEach(name=>{const b=document.createElement('button');b.className='chip';b.textContent=name;b.type='button';b.setAttribute('aria-pressed',String(selected.has(name)));b.onclick=()=>{selected.has(name)?selected.delete(name):selected.add(name);drawIngredients();updateCount()};group.append(b)});holder.append(group)});if(!holder.childElementCount)holder.textContent='No matching ingredients found.'}
+document.getElementById('search').oninput=drawIngredients;drawIngredients();
+
+document.getElementById("clear").addEventListener("click",()=>{selected.clear();document.getElementById("search").value="";drawIngredients();updateCount();document.getElementById("results").innerHTML="<h2>🍽️ Recipe ideas</h2><p>Choose some ingredients above to get started.</p>"});
 document.getElementById("find").addEventListener("click",()=>{
 const target=document.getElementById("results");target.replaceChildren();
 const heading=document.createElement("h2");heading.textContent="🍽️ Your recipe matches";target.append(heading);
@@ -63,7 +72,7 @@ const note=document.createElement("p");note.textContent=`${matched.filter(r=>!r.
 const grid=document.createElement("div");grid.className="grid";
 matched.forEach(r=>{
 const card=document.createElement("article");card.className="card";
-const icon=document.createElement("div");icon.className="emoji";icon.textContent=r.emoji;card.append(icon);
+const top=document.createElement('div');top.className='card-top';const icon=document.createElement("div");icon.className="emoji";icon.textContent=r.emoji;const fav=document.createElement('button');fav.className='favorite'+(favorites.has(r.name)?' saved':'');fav.textContent=favorites.has(r.name)?'♥':'♡';fav.setAttribute('aria-label','Save '+r.name);fav.onclick=()=>{favorites.has(r.name)?favorites.delete(r.name):favorites.add(r.name);localStorage.setItem('wc_favorites',JSON.stringify([...favorites]));fav.textContent=favorites.has(r.name)?'♥':'♡';fav.classList.toggle('saved',favorites.has(r.name))};top.append(icon,fav);card.append(top);
 const title=document.createElement("h3");title.textContent=r.name;card.append(title);
 const tag=document.createElement("span");tag.className="tag";tag.textContent=r.missing.length?`${r.missing.length} missing ingredient${r.missing.length===1?"":"s"}`:"✅ Ready to cook!";card.append(tag);
 const time=document.createElement("p");time.textContent=`⏱️ ${r.time} minutes`;card.append(time);
